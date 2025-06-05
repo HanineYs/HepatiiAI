@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: couchdb-on-render
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: COUCHDB_USER
+        value: admin
+      - key: COUCHDB_PASSWORD
+        value: 123456
+    ports:
+      - 5984

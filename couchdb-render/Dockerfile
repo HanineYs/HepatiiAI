@@ -1,0 +1,8 @@
+FROM couchdb:3.5
+
+ENV COUCHDB_USER=admin
+ENV COUCHDB_PASSWORD=123456
+
+VOLUME /opt/couchdb/data
+
+EXPOSE 5984
