@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% block head %}
+<style>
+  .debug { border: 1px solid red; }
+</style>
+{% endblock %}
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" class="logo" alt="Admin Panel Logo">
+        <h3>Admin Panel</h3>
+      </div>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" href="#" onclick="showSection('dashboard-section')">
+            <i class='bx bx-dashboard'></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showSection('patients-section')">
+            <i class='bx bx-user'></i> Patients
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showSection('predictions-section')">
+            <i class='bx bx-analyse'></i> Prédictions
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showSection('metrics-section')">
+            <i class='bx bx-stats'></i> Métriques
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showSection('commentaire-section')">
+            <i class='bx bx-message-detail'></i> Commentaire
+          </a>
+        </li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="admin-user">
+          <div class="admin-profile">
+            <img src="https://icons.veryicon.com/png/o/application/cloud-supervision-platform-vr10/admin-5.png" alt="">
+            <div class="admin-info">
+              <h3 id="patient-name">Admin</h3>
+            </div>
+          </div>
+          <a href="/logout" class="logout-btn">
+            <i class='bx bx-log-out'></i>
+            <span class="hide"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  
+    
+<!-- Footer Mobile -->
+<div class="mobile-footer">
+  <ul class="nav">
+    <li class="nav-item">
+      <a class="nav-link" href="#" onclick="showSection('dashboard-section')">
+        <i class='bx bx-dashboard'></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#" onclick="showSection('patients-section')">
+        <i class='bx bx-user'></i>
+        <span>Patients</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#" onclick="showSection('predictions-section')">
+        <i class='bx bx-analyse'></i>
+        <span>Prédictions</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#" onclick="showSection('commentaire-section')">
+        <i class='bx bx-message-detail'></i>
+        <span>Commentaires</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="logout-btn" href="/logout">
+        <i class='bx bx-log-out'></i>
+        <span>Déconnexion</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Dashboard Section -->
+      <section id="dashboard-section">
+        <h2>Tableau de Bord</h2>
+        <div class="row">
+          <!-- KPI Cards -->
+         <!-- Dans la section Dashboard -->
+         <div class="col-md-3">
+          <div class="card kpi-card">
+              <div class="card-body">
+                  <h5 class="card-title">Patients</h5>
+                  <h2>{{ stats.total_patients }}</h2>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card kpi-card">
+              <div class="card-body">
+                  <h5 class="card-title">Prédictions</h5>
+                  <h2>{{ stats.total_predictions }}</h2>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card kpi-card">
+              <div class="card-body">
+                  <h5 class="card-title">Malades</h5>
+                  <h2>{{ stats.malades }}</h2>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card kpi-card">
+              <div class="card-body">
+                  <h5 class="card-title">Sains</h5>
+                  <h2>{{ stats.sains }}</h2>
+              </div>
+          </div>
+        </div>
+        </div>
+
+      
+        <!-- Charts Row -->
+<div class="card">
+  <div class="card-header">
+    Répartition Malade/Sain
+  </div>
+  <div class="card-body">
+    <div class="chart-container" style="position: relative; height: 300px;">
+      <canvas id="healthDistributionChart"></canvas>
+    </div>
+    <div class="chart-legend text-center mt-3">
+      <span class="legend-item mr-3"><i class="bx bx-circle text-danger mr-1"></i> Malades: {{ stats.malades }}</span>
+      <span class="legend-item"><i class="bx bx-circle text-primary mr-1"></i> Sains: {{ stats.sains }}</span>
+    </div>
+  </div>
+</div>
+      </section>
+
+      <!-- Patients Section -->
+      <section id="patients-section" class="d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Gestion des Patients</h2>
+          <button class="btn btn-primary" onclick="refreshPatients()">
+            <i class='bx bx-refresh'></i> Rafraîchir
+          </button>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th>ID</th>
+                      <th>Prénom</th>
+                      <th>Nom</th>
+                      <th>Email</th>
+                      <th>Date d'inscription</th>
+                      <th>Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for patient in patients %}
+                  <tr>
+                      <td>{{ patient._id|truncate(8, True, '...') }}</td>
+                      <td>{{ patient.firstname }}</td>
+                      <td>{{ patient.lastname }}</td>
+                      <td>{{ patient.email }}</td>
+                      <td>{{ patient.created_at|format_date }}</td>
+                      <td>
+                          <button class="btn btn-sm btn-warning" 
+                                  onclick="editPatient('{{ patient._id }}')">
+                              <i class='bx bx-edit'></i>
+                          </button>
+                          <button class="btn btn-sm btn-danger" 
+                                  onclick="deletePatient('{{ patient._id }}')">
+                              <i class='bx bx-trash'></i>
+                          </button>
+                      </td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                      <td colspan="6" class="text-center">Aucun patient trouvé</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Predictions Section -->
+      <section id="predictions-section" class="d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Historique des Prédictions</h2>
+          <button class="btn btn-primary" onclick="refreshPredictions()">
+            <i class='bx bx-refresh'></i> Rafraîchir
+          </button>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th>Patient</th>
+                      <th>Email</th>
+                      <th>Résultat</th>
+                      <th>Date</th>
+                      <th>Détails</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for pred in predictions %}
+                  <tr>
+                      <td>{{ pred.username }}</td>
+                      <td>{{ pred.email }}</td>
+                      <td>
+                        {% if "Présence de signes d'une maladie hépatique détectée" in pred.result %}
+                          <span class="badge bg-danger">{{ pred.result }}</span>
+                        {% elif "Aucun signe de maladie hépatique détecté" in pred.result %}
+                          <span class="badge bg-success">{{ pred.result }}</span>
+                        {% else %}
+                          <span class="badge bg-secondary">{{ pred.result }}</span>
+                        {% endif %}
+                      </td>
+                      <td>{{ pred.timestamp|format_date }}</td>
+                      <td>
+                          <button class="btn btn-sm btn-info" 
+                                  onclick="showPredictionDetails('{{ pred._id }}')">
+                              <i class="fas fa-eye"></i>
+                          </button>
+                      </td>
+                  </tr>
+                  {% else %}
+                  <tr>
+                      <td colspan="5" class="text-center">
+                          {% if predictions is defined %}
+                          Aucune prédiction trouvée
+                          {% else %}
+                          Erreur de chargement des prédictions
+                          {% endif %}
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Metrics Section -->
+      <!-- Metrics Section -->
+<section id="metrics-section" class="d-none">
+  <h2>Métriques du Modèle</h2>
+  <div class="row">
+
+
+      <!-- Données du Formulaire -->
+      <div class="col-md-6">
+          <div class="card">
+              <div class="card-header">
+                  Données du Formulaire
+              </div>
+              <div class="card-body">
+                  
+<table class="table table-striped">
+  <thead>
+      <tr>
+          <th>Paramètre</th>
+          <th>Malades (Moyenne)</th>
+          <th>Sains (Moyenne)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <!-- Bilirubine -->
+      <tr>
+          <td>Bilirubine totale</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Total_Bilirubin.sick) }}</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Total_Bilirubin.healthy) }}</td>
+      </tr>
+      
+      <!-- Phosphatase alcaline -->
+      <tr>
+          <td>Phosphatase alcaline</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Alkaline_Phosphotase.sick) }}</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Alkaline_Phosphotase.healthy) }}</td>
+      </tr>
+      
+      <!-- ALT -->
+      <tr>
+          <td>Transaminases (ALT)</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Alamine_Aminotransferase.sick) }}</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Alamine_Aminotransferase.healthy) }}</td>
+      </tr>
+      
+      <!-- AST -->
+      <tr>
+          <td>Transaminases (AST)</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Aspartate_Aminotransferase.sick) }}</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Aspartate_Aminotransferase.healthy) }}</td>
+      </tr>
+      
+      <!-- Albumine -->
+      <tr>
+          <td>Albumine</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Albumin.sick) }}</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Albumin.healthy) }}</td>
+      </tr>
+      
+      <!-- Ratio A/G -->
+      <tr>
+          <td>Ratio Albumine/Globuline</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Albumin_and_Globulin_Ratio.sick) }}</td>
+          <td>{{ "%.2f"|format(stats.feature_means.Albumin_and_Globulin_Ratio.healthy) }}</td>
+      </tr>
+  </tbody>
+</table>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  
+
+  <!-- Indicateurs de Performance -->
+  <div class="row mt-4">
+      <div class="col-md-12">
+          <div class="card">
+              <div class="card-header">
+                  Indicateurs de Performance
+              </div>
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-md-3">
+                          <div class="metric-card">
+                              <h5>Accuracy</h5>
+                              <div class="metric-value">{{ "%.2f"|format(stats.model_metrics.accuracy * 100) }}%</div>
+                              <p class="metric-description">Proportion de prédictions correctes</p>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="metric-card">
+                              <h5>Précision</h5>
+                              <div class="metric-value">{{ "%.2f"|format(stats.model_metrics.precision * 100) }}%</div>
+                              <p class="metric-description">Prédictions positives correctes</p>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="metric-card">
+                              <h5>Rappel</h5>
+                              <div class="metric-value">{{ "%.2f"|format(stats.model_metrics.recall * 100) }}%</div>
+                              <p class="metric-description">Cas positifs détectés</p>
+                          </div>
+                      </div>
+                      <div class="col-md-3">
+                          <div class="metric-card">
+                              <h5>F1-Score</h5>
+                              <div class="metric-value">{{ "%.2f"|format(stats.model_metrics.f1_score * 100) }}%</div>
+                              <p class="metric-description">Moyenne harmonique précision/rappel</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+ <!-- Commentaire Section -->
+ <!-- Commentaire Section -->
+<section id="commentaire-section" class="d-none">
+  <h2>Commentaires</h2>
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="comments-table-body">
+          {% for comment in comments %}
+          <tr class="{{ 'table-warning' if comment.status == 'unread' else '' }}">
+            <td>{{ comment.patient_name }}</td>
+            <td>{{ comment.message }}</td>
+            <td>{{ comment.timestamp|format_date }}</td>
+            <td>
+              <span class="badge {{ 'bg-warning' if comment.status == 'unread' else 'bg-success' }}">
+                {{ 'Non lu' if comment.status == 'unread' else 'Lu' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-success" 
+                      onclick="markAsRead('{{ comment._id }}')"
+                      {{ 'disabled' if comment.status == 'read' else '' }}>
+                <i class='bx bx-check'></i> Marquer lu
+              </button>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="text-center">Aucun commentaire trouvé</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal fade" id="patientDetailsModal" tabindex="-1" aria-hidden="true">
+    <!-- Modal content for patient details -->
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='admin.js') }}"></script>
+  <script src="static/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Formatage de la date amélioré
+        function formatDate(timestamp) {
+            if (!timestamp) return 'N/A';
+            try {
+                const date = new Date(timestamp);
+                if (isNaN(date.getTime())) {
+                    return 'N/A';
+                }
+                return date.toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                console.error("Erreur format date:", e);
+                return 'N/A';
+            }
+        }
+    
+        // Fonction pour charger les prédictions
+        function loadPredictions() {
+            fetch('/get_predictions')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                    const tableBody = document.getElementById('predictions-table-body');
+                    tableBody.innerHTML = '';
+                    
+                    if (data.predictions.length === 0) {
+                        tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="6" class="text-center">Aucune prédiction trouvée</td>
+                            </tr>
+                        `;
+                        return;
+                    }
+    
+                    data.predictions.forEach(pred => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${pred._id.substring(0, 6)}...</td>
+                            <td>${pred.username}</td>
+                            <td>${formatDate(pred.timestamp)}</td>
+                            <td>${pred.result || 'N/A'}</td>
+                            <td>N/A</td>
+                            <td>
+                                <button class="btn btn-sm btn-info">Détails</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error("Erreur chargement prédictions:", error);
+                    document.getElementById('predictions-table-body').innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center text-danger">Erreur de chargement</td>
+                        </tr>
+                    `;
+                });
+        }
+    
+        // Afficher la section avec rechargement
+        window.showSection = function(sectionId) {
+            document.querySelectorAll('.main-content section').forEach(section => {
+                section.classList.add('d-none');
+            });
+            document.getElementById(sectionId).classList.remove('d-none');
+            
+            if (sectionId === 'predictions-section') {
+                loadPredictions();
+            }
+        };
+    
+        // Chargement initial
+        loadPredictions();
+    });
+
+    
+    </script>
+  
+</body>
+
+</html>

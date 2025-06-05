@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidebar Menu</title>
+  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+  <link href='https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   
+</head>
+<!-- Ajoutez ceci avant la fermeture du body -->
+<div class="mobile-menu-container">
+  <div class="mobile-menu-toggle">
+    <i class='bx bx-user'></i>
+  </div>
+  
+  <div class="mobile-menu-dropdown">
+    <div class="mobile-menu-header">
+      <img src="https://icons.veryicon.com/png/o/application/cloud-supervision-platform-vr10/admin-5.png" alt="">
+      <h3>{{ patient_name }}</h3>
+      <br>
+      <small>Patient</small>
+    </div>
+    
+    <div class="mobile-menu-items">
+  <a href="#" class="mobile-menu-item" data-section="dashboard">
+    <i class='bx bx-tachometer'></i> Tableau de bord
+  </a>
+  
+  <a href="#" class="mobile-menu-item" data-section="formulaire">
+    <i class='bx bx-folder'></i> Diagnostic hépatique
+  </a>
+  
+  <a href="#" class="mobile-menu-item" data-section="analytics">
+    <i class='bx bx-bar-chart-square'></i> Résultats
+  </a>
+  
+  <a href="#" class="mobile-menu-item" data-section="tools">
+    <i class='bx bx-message-square-detail'></i> Analyse d'images
+  </a>
+  
+  <a href="#" class="mobile-menu-item" data-section="help">
+    <i class='bx bx-help-circle'></i> Aide
+  </a>
+  
+  <a href="#" class="mobile-menu-item" data-section="settings">
+    <i class='bx bx-cog'></i> Paramètres
+  </a>
+  
+  <a href="/logout" class="mobile-menu-item logout">
+    <i class='bx bx-log-out'></i> Déconnexion
+  </a>
+</div>
+  </div>
+</div>
+<body>
+
+  <nav>
+    <div class="sidebar-top">
+      <span class="shrink-btn">
+        <i class='bx bx-chevron-left'></i>
+      </span>
+      <img src="{{ url_for('static', filename='img/logo.png') }}" class="logo" alt="HepatoAI Logo">
+      <h3 class="hide">HepatoAI</h3>
+    </div>
+
+    <div class="search">
+      <i class='bx bx-search'></i>
+      <input type="text" class="hide" placeholder="Quick Search ...">
+    </div>
+
+    <div class="sidebar-links">
+  <ul>
+    <div class="active-tab"></div>
+    <li class="tooltip-element" data-tooltip="0">
+      <a href="#" class="active" data-active="0">
+        <div class="icon">
+          <i class='bx bx-tachometer'></i>
+          <i class='bx bxs-tachometer'></i>
+        </div>
+        <span class="link hide">Tableau de bord</span>
+      </a>
+    </li>
+    <li class="tooltip-element" data-tooltip="1">
+      <a href="#" data-active="1">
+        <div class="icon">
+          <i class='bx bx-folder'></i>
+          <i class='bx bxs-folder'></i>
+        </div>
+        <span class="link hide">Diagnostic hépatique</span>
+      </a>
+    </li>
+    <li class="tooltip-element" data-tooltip="3">
+      <a href="#" data-active="3">
+        <div class="icon">
+          <i class='bx bx-bar-chart-square'></i>
+          <i class='bx bxs-bar-chart-square'></i>
+        </div>
+        <span class="link hide">Résultats</span>
+      </a>
+    </li>
+    <li class="tooltip-element" data-tooltip="2">
+      <a href="#" data-active="2">
+        <div class="icon">
+          <i class='bx bx-message-square-detail'></i>
+          <i class='bx bxs-message-square-detail'></i>
+        </div>
+        <span class="link hide">Analyse d'images</span>
+      </a>
+    </li>
+    <div class="tooltip">
+      <span class="show">Tableau de bord</span>
+      <span>Diagnostic hépatique</span>
+      <span>Résultats</span>
+      <span>Analyse d'images</span>
+    </div>
+  </ul>
+
+  <h4 class="hide">Autres</h4>
+
+  <ul>
+    <li class="tooltip-element" data-tooltip="1">
+      <a href="#" data-active="5">
+        <div class="icon">
+          <i class='bx bx-help-circle'></i>
+          <i class='bx bxs-help-circle'></i>
+        </div>
+        <span class="link hide">Aide</span>
+      </a>
+    </li>
+    <li class="tooltip-element" data-tooltip="2">
+      <a href="#" data-active="6">
+        <div class="icon">
+          <i class='bx bx-cog'></i>
+          <i class='bx bxs-cog'></i>
+        </div>
+        <span class="link hide">Paramètres</span>
+      </a>
+    </li>
+    <div class="tooltip">
+      <span>Aide</span>
+      <span>Paramètres</span>
+    </div>
+  </ul>
+</div>
+
+    <div class="sidebar-footer">
+      <div class="admin-user">
+        <div class="admin-profile">
+          <img src="https://icons.veryicon.com/png/o/application/cloud-supervision-platform-vr10/admin-5.png" alt="">
+          <div class="admin-info">
+            <h3 id="patient-name">{{ patient_name }}</h3>
+            <h5>Patient</h5>
+          </div>
+        </div>
+        <a href="/logout" class="logout-btn">
+          <i class='bx bx-log-out'></i>
+          <span class="hide"></span>
+        </a>
+      </div>
+    </div>
+      
+    </div>
+  </nav>
+
+  <main>
+    <!-- Section Dashboard (visible par défaut) -->
+    
+    <section id="dashboard" class="content-section" style="display: none;padding: 180px; margin: 10px;" >
+      <div class="dashboard-content">
+        <h1 style="font-size: 2.5rem; font-weight: 700;  ">HepatoAI App</h1>
+
+        <div class="welcome-card">
+          <p style=" font-size: 1.5rem; font-weight: 200;">Bienvenue sur HepatoAI App, l'application pour la prédiction de la maladie de l'hépatite.</p>
+          <p style=" font-size: 1.5rem;font-weight: 200;">Cette application fournit des prédictions précises pour la maladie de l'hépatite basées sur machine learning.</p>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="dashboard-image" style=" display: flex; justify-content: center;">
+          <img src="/static/img/ia.svg" alt="Illustration Intelligence Artificielle">
+        </div>
+      </div>
+    </div>
+  </div>
+    </section>
+    
+
+    <!-- Section Formulaire de soumission (masquée par défaut) -->
+    <section id="formulaire" class="content-section" style="display: none;">
+      <div class="container" >
+          <h2 class='container-heading'><span class="heading_font">Liver Disease Prediction</span></h2>
+      </div>
+  
+      <div class="ml-container"  >
+        <form action="/patient/predict" method="POST">
+          <div class="form-group">
+              <h3>Age</h3>
+              <input id="first" name="Age" placeholder="in Year" required>
+          </div>
+          <div class="form-group">
+              <h3>Gender</h3>
+              <input id="second" name="Gender" placeholder="Male = 1, Female=0" required>
+          </div>
+
+          <div class="form-group">
+              <h3>Total Bilirubin</h3>
+              <input id="third" name="Total_Bilirubin" placeholder="Total Bilirubin" required>
+          </div>
+
+           <!-- Ajoutez ce nouveau champ -->
+         <div class="form-group">
+               <h3>Direct Bilirubin</h3>
+               <input id="direct-bilirubin" name="Direct_Bilirubin" placeholder="Direct Bilirubin" required>
+         </div>
+
+          <div class="form-group">
+              <h3>Alkaline Phosphotase</h3>
+              <input id="fourth" name="Alkaline_Phosphotase" placeholder="Alkaline Phosphotase" required>
+          </div>
+
+          <div class="form-group">
+              <h3>Alamine Aminotransferase</h3>
+              <input id="fifth" name="Alamine_Aminotransferase" placeholder="Alamine Aminotransferase" required>
+          </div>
+          <div class="form-group">
+              <h3>Aspartate Aminotransferase</h3>
+              <input id="sixth" name="Aspartate_Aminotransferase" placeholder="Aspartate Aminotransferase" required>
+          </div>
+
+          <div class="form-group">
+              <h3>Total Protiens</h3>
+              <input id="seventh" name="Total_Protiens" placeholder="Total Protiens" required>
+          </div>
+          <div class="form-group">
+              <h3>Albumin</h3>
+              <input id="eight" name="Albumin" placeholder="Albumin" required>
+          </div>
+
+          <div class="form-group">
+              <h3>Albumin and Globulin Ratio</h3>
+              <input id="ninth" name="Albumin_and_Globulin_Ratio" placeholder="Albumin and Globulin Ratio" required>
+          </div>
+          
+          
+          <button id="sub" type="submit">Submit</button>
+      </form>
+      </div>
+  </section>
+
+  <div id="notification" style="display: none; position: fixed; top: 50%; left: 50%; 
+transform: translate(-50%, -50%); padding: 40px; border-radius: 20px; 
+box-shadow: 0 10px 25px rgba(0,0,0,0.15); text-align: center; z-index: 1000;
+width: 450px; max-width: 90%; font-family: 'Segoe UI', sans-serif;
+animation: fadeIn 0.4s ease-out;">
+  
+  <div id="notif-icon" style="font-size: 80px; margin-bottom: 20px;"></div>
+  <h2 id="notif-title" style="margin: 0 0 15px 0; font-size: 28px; font-weight: 600;"></h2>
+  <div id="notif-text" style="margin: 0; font-size: 20px; line-height: 1.6; padding: 0 20px;"></div>
+  
+  <button id="notif-btn" style="margin-top: 30px; padding: 12px 30px; 
+         background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+         color: white; border: none; border-radius: 8px; 
+         cursor: pointer; font-size: 18px; font-weight: 500;
+         box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: all 0.3s;">
+     OK
+  </button>
+</div>
+
+<section id="analytics" class="content-section" style="display: none;">
+  <div class="export-actions">
+    <button id="export-pdf" class="btn-export" style="background-color: #00ACC1;  color: white; padding: 10px 20px;"  disabled>
+      <i class='bx bx-download'></i> Exporter le Rapport PDF
+    </button>
+
+  </div>
+
+  
+  <br>
+  <div class="analytics-image" style=" display: flex; justify-content: center; size: 30px;">
+    <img src="/static/img/dow.svg" alt="Illustration Intelligence Artificielle">
+  </div>
+</section>
+  
+<!-- Section Outils -->
+<section id="tools" class="content-section" style="display: none;">
+  <h2>🛠 Outils d'aide</h2>
+
+  <!-- Outil 1 : Analyse d'image -->
+  <div class="tool-card">
+    <div class="tool-header" onclick="toggleTool('image-analysis')">
+      <span class="tool-icon">📷</span>
+      <h3>Analyse d'image pour le diagnostic du foie</h3>
+      <i class='bx bx-chevron-down' id="image-analysis-arrow"></i>
+    </div>
+    <div class="tool-content" id="image-analysis-content" style="display: none;">
+      <div class="alert alert-info">
+        <i class='bx bx-info-circle'></i>
+        <strong>Note importante :</strong> Cet outil est spécifiquement conçu pour 
+        l'analyse d'images médicales du foie (échographies, IRM, scanner). 
+        Les autres types d'images donneront des résultats non fiables.
+      </div>
+      
+      <form id="image-form" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="image-upload">Sélectionner une image médicale du foie :</label>
+          <input type="file" id="image-upload" name="image" accept="image/*" required>
+          <small class="form-text text-muted">
+            Formats acceptés: JPEG, PNG. Taille max: 5MB. 
+            Seules les images hépatiques seront analysées.
+          </small>
+        </div>
+        
+        <!-- Ajout de la prévisualisation -->
+        <div id="image-preview-container" style="display: none; margin: 20px 0;">
+          <h4>Aperçu de l'image :</h4>
+          <img id="preview-image" style="max-width: 100%; max-height: 300px;">
+        </div>
+        
+        <button type="submit" class="tool-action">
+          <i class='bx bx-analyse'></i> Analyser l'image
+        </button>
+      </form>
+      
+      <!-- Zone de résultats -->
+      <div id="image-result" style="display: none; margin-top: 20px;">
+        <div id="result-content">
+          <!-- Le contenu dynamique sera inséré ici -->
+        </div>
+        
+        <!-- Boutons qui restent toujours visibles une fois la section affichée -->
+        <div class="result-actions" style="margin-top: 20px; display: flex; gap: 15px; justify-content: center; align-items: center;">
+          <button id="more-info-btn" style="padding: 12px 25px; background: linear-gradient(135deg, #4CAF50, #66BB6A); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 150px; justify-content: center;">
+            <i class='bx bx-info-circle' style="font-size: 18px;"></i> Savoir plus
+          </button>
+          <button id="export-pdf-btn" style="padding: 12px 25px; background: linear-gradient(135deg, #2196F3, #64B5F6); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 500; display: flex; align-items: center; gap: 8px; transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-width: 150px; justify-content: center;">
+            <i class='bx bx-download' style="font-size: 18px;"></i> Rapport PDF
+         </button>
+        </div>
+
+        <div class="medical-notes">
+          <small>Note: Cette analyse est fournie à titre indicatif. Consultez toujours un spécialiste pour un diagnostic médical complet.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  
+
+<!-- Section Aide (masquée par défaut) -->
+<section id="help" class="content-section" style="display: none;">
+  <h2>❓ Aide</h2>
+
+  <!-- Envoyer un commentaire -->
+  <div class="help-card">
+    <h3>📤 Envoyer un commentaire</h3>
+    <textarea id="comment-message" placeholder="Votre message..."></textarea>
+    <button onclick="sendComment()">Envoyer</button>
+    <p id="comment-status" style="display: none;"></p>
+  </div>
+</section>
+
+
+
+<!-- Section Paramètres -->
+<section id="settings" class="content-section" style="display: none;">
+  <div class="settings-container">
+    <h1>⚙️ Paramètres</h1>
+
+    <!-- Ajoutez ceci dans la section Paramètres -->
+<div class="setting-frame">
+  <div class="setting-header" onclick="toggleSetting('account')">
+    <h2>📋 Gestion du Compte</h2>
+    <i class='bx bx-chevron-down' id="account-arrow"></i>
+  </div>
+  <div class="setting-content" id="account-content">
+    <form id="account-form">
+      <div class="form-group">
+        <label>Prénom</label>
+        <input type="text" id="firstname" value="{{ patient.firstname }}" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" id="lastname" value="{{ patient.lastname }}" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" value="{{ patient.email }}" required>
+      </div>
+      
+      <button type="button" onclick="updateAccount()" class="btn-save">
+        Enregistrer
+      </button>
+      <div id="account-message" class="message"></div>
+    </form>
+  </div>
+</div>
+
+<div class="setting-frame">
+  <div class="setting-header" onclick="toggleSetting('security')">
+    <h2>🔒 Sécurité</h2>
+    <i class='bx bx-chevron-down' id="security-arrow"></i>
+  </div>
+  <div class="setting-content" id="security-content">
+    <form id="password-form">
+      <div class="form-group">
+        <label>Ancien mot de passe</label>
+        <input type="password" id="old-password" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Nouveau mot de passe</label>
+        <input type="password" id="new-password" required>
+        <small class="password-hint">(Minimum 8 caractères, 1 majuscule, 1 chiffre, 1 caractère spécial)</small>
+      </div>
+      
+      <div class="form-group">
+        <label>Confirmer le nouveau mot de passe</label>
+        <input type="password" id="confirm-password" required>
+      </div>
+      
+      <button type="button" onclick="updatePassword()" class="btn-save">
+        Modifier le mot de passe
+      </button>
+      <div id="password-message" class="message"></div>
+    </form>
+  </div>
+</div>
+
+
+
+    <div class="setting-frame danger">
+      <div class="setting-header" onclick="toggleSetting('delete-account')">
+        <h2>⚠️ Suppression du Compte</h2>
+        <i class='bx bx-chevron-down' id="delete-account-arrow"></i>
+      </div>
+      <div class="setting-content" id="delete-account-content" style="display: none;">
+        <div class="warning-message">
+          <p>⚠️ <strong>Attention : Cette action est irréversible</strong></p>
+          <p>Toutes vos données seront définitivement supprimées.</p>
+        </div>
+        
+        <div class="form-group">
+          <label for="confirm-password-delete">Confirmez votre mot de passe :</label>
+          <input type="password" id="confirm-password-delete" required>
+        </div>
+        
+        <button type="button" onclick="confirmAccountDeletion()" class="btn-delete">
+          <i class='bx bx-trash'></i> Supprimer définitivement mon compte
+        </button>
+        <div id="delete-message" class="message"></div>
+      </div>
+    </div>
+</section>
+<br>
+<br>
+<p class="copyright">
+  &copy; 2025 - <span>MZ</span> All Rights Reserved.
+</p>
+</main>                     
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='patient.js') }}"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-3d@2.0.0/dist/chartjs-plugin-3d.min.js"></script>
+  <!-- Bibliothèques pour génération PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Vérifier l'abonnement avant d'afficher la page
+    fetch('/check-subscription')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.active) {
+                window.location.href = '/payment';
+            } else {
+                initializeDashboard();
+                setupMobileMenu();
+                setupMenuItems();
+                adjustMainHeight();
+            }
+        });
+});
+
+  function adjustMainHeight() {
+  const navHeight = document.querySelector('nav').offsetHeight;
+  document.querySelector('main').style.paddingBottom = navHeight + 'px';  // Retirez le "+ 20"
+}
+  // Fonction pour basculer entre les sections
+  function showSection(sectionId) {
+    // Masquer toutes les sections
+    document.querySelectorAll('.content-section').forEach(section => {
+      section.style.display = 'none';
+    });
+    
+    // Afficher la section demandée
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+      targetSection.style.display = 'block';
+    }
+    
+    // Mettre à jour l'onglet actif dans la sidebar
+    updateActiveTab(sectionId);
+  }
+
+  // Fonction pour mettre à jour l'onglet actif dans la sidebar
+  function updateActiveTab(sectionId) {
+    const sectionMap = {
+      'dashboard': '0',
+      'formulaire': '1',
+      'analytics': '3',
+      'tools': '2',
+      'help': '5',
+      'settings': '6'
+    };
+    
+    const activeValue = sectionMap[sectionId];
+    if (activeValue) {
+      // Retirer la classe active de tous les éléments
+      document.querySelectorAll('.sidebar-links a').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Ajouter la classe active à l'élément correspondant
+      const activeLink = document.querySelector(`.sidebar-links a[data-active="${activeValue}"]`);
+      if (activeLink) {
+        activeLink.classList.add('active');
+        
+        // Mettre à jour l'onglet actif visuel
+        const activeTab = document.querySelector('.active-tab');
+        if (activeTab) {
+          const linkItem = activeLink.closest('li');
+          if (linkItem) {
+            activeTab.style.top = `${linkItem.offsetTop}px`;
+          }
+        }
+      }
+    }
+  }
+
+  // Fonction pour gérer le menu mobile
+  function setupMobileMenu() {
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    const menuContainer = document.querySelector('.mobile-menu-container');
+    
+    if (menuToggle && menuContainer) {
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        menuContainer.classList.toggle('active');
+      });
+      
+      // Fermer le menu quand on clique ailleurs
+      document.addEventListener('click', function() {
+        menuContainer.classList.remove('active');
+      });
+      
+      // Empêcher la fermeture quand on clique dans le menu
+      const menuDropdown = document.querySelector('.mobile-menu-dropdown');
+      if (menuDropdown) {
+        menuDropdown.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      }
+    }
+  }
+
+  // Fonction pour gérer les clics sur les éléments du menu
+  function setupMenuItems() {
+    // Gestion des clics dans la sidebar
+    document.querySelectorAll('.sidebar-links a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const sectionMap = {
+          '0': 'dashboard',
+          '1': 'formulaire',
+          '3': 'analytics',
+          '2': 'tools',
+          '5': 'help',
+          '6': 'settings'
+        };
+        const sectionId = sectionMap[this.getAttribute('data-active')];
+        showSection(sectionId);
+      });
+    });
+    
+    // Gestion des clics dans le menu mobile
+    document.querySelectorAll('.mobile-menu-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (!this.classList.contains('logout')) {
+          e.preventDefault();
+          const sectionId = this.getAttribute('data-section');
+          showSection(sectionId);
+        }
+        
+        // Fermer le menu mobile après sélection
+        document.querySelector('.mobile-menu-container').classList.remove('active');
+      });
+    });
+  }
+
+  // Fonction pour initialiser le dashboard
+  function initializeDashboard() {
+    // Afficher le dashboard par défaut
+    showSection('dashboard');
+    
+    // Configurer le bouton de rétrécissement de la sidebar
+    const shrinkBtn = document.querySelector('.shrink-btn');
+    if (shrinkBtn) {
+      shrinkBtn.addEventListener('click', function() {
+        document.querySelector('nav').classList.toggle('shrink');
+        document.querySelector('.sidebar-links ul .active-tab').style.opacity = '0';
+        
+        setTimeout(() => {
+          document.querySelector('.sidebar-links ul .active-tab').style.opacity = '1';
+        }, 500);
+      });
+    }
+  }
+
+  // Fonction principale exécutée au chargement de la page
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+    setupMobileMenu();
+    setupMenuItems();
+    
+    // Ajuster la hauteur du contenu principal
+    function adjustMainHeight() {
+      const navHeight = document.querySelector('nav').offsetHeight;
+      document.querySelector('main').style.paddingBottom = navHeight + 20 + 'px';
+    }
+    
+    window.addEventListener('resize', adjustMainHeight);
+    adjustMainHeight();
+  });
+
+  // Fonction pour afficher les notifications
+  function showNotification(type, title, message) {
+    const notification = document.getElementById('notification');
+    const icon = document.getElementById('notif-icon');
+    const notifTitle = document.getElementById('notif-title');
+    const notifText = document.getElementById('notif-text');
+    const notifBtn = document.getElementById('notif-btn');
+    
+    // Configurer en fonction du type
+    if (type === 'success') {
+      notification.style.background = 'linear-gradient(135deg, #4CAF50, #81C784)';
+      icon.innerHTML = '✓';
+    } else if (type === 'error') {
+      notification.style.background = 'linear-gradient(135deg, #F44336, #E57373)';
+      icon.innerHTML = '✗';
+    } else {
+      notification.style.background = 'linear-gradient(135deg, #2196F3, #64B5F6)';
+      icon.innerHTML = 'i';
+    }
+    
+    notifTitle.textContent = title;
+    notifText.textContent = message;
+    notification.style.display = 'block';
+    
+    // Fermer la notification
+    notifBtn.onclick = function() {
+      notification.style.display = 'none';
+    };
+  }
+
+  //ajouter 
+
+  
+  
+
+window.addEventListener('resize', adjustMobileLayout);
+document.addEventListener('DOMContentLoaded', adjustMobileLayout);
+</script>
+</body>
+
+</html>
+

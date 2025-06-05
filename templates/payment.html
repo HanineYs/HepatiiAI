@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abonnement - Plateforme Médicale</title>
+    
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subscription-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .plans-section {
+            padding: 40px;
+            background: #fafbfc;
+        }
+
+        .payment-section {
+            padding: 40px;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .plan-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .plan-card {
+            border: 2px solid #e1e8ed;
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            background: white;
+        }
+
+        .plan-card:hover {
+            border-color: #4facfe;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.15);
+        }
+
+        .plan-card.selected {
+            border-color: #4facfe;
+            background: linear-gradient(135deg, #4facfe11, #00f2fe11);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.2);
+        }
+
+        .plan-card .check-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .plan-card.selected .check-icon {
+            background: #4facfe;
+            border-color: #4facfe;
+            color: white;
+        }
+
+        .plan-duration {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .plan-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4facfe;
+            margin-bottom: 8px;
+        }
+
+        .plan-price .currency {
+            font-size: 1.2rem;
+            vertical-align: top;
+        }
+
+        .plan-savings {
+            background: #10b981;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+        }
+
+        .plan-features li {
+            padding: 6px 0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-features li i {
+            color: #10b981;
+            width: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafbfc;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .card-row {
+            display: grid;
+            grid-template-columns: 1fr 120px;
+            gap: 16px;
+        }
+
+        .security-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f0f9f0;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border-left: 4px solid #10b981;
+        }
+
+        .security-info i {
+            color: #10b981;
+            font-size: 1.2rem;
+        }
+
+        .security-info p {
+            color: #065f46;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .payment-summary {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            color: #64748b;
+        }
+
+        .summary-row.total {
+            border-top: 2px solid #e1e8ed;
+            padding-top: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .pay-button {
+            width: 100%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.3);
+        }
+
+        .pay-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .accepted-cards {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-icon {
+            height: 32px;
+            padding: 6px 12px;
+            background: white;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 4px solid #dc2626;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .card-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="subscription-container">
+        <div class="header">
+            <h1><i class="fas fa-user-md"></i> Abonnement Médical</h1>
+            <p>Accédez à tous les outils d'analyse médicale professionnels</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Section des plans -->
+            <div class="plans-section">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Choisissez votre plan
+                </h2>
+
+                <div class="plan-grid">
+                    <div class="plan-card" data-plan="monthly" data-price="49" data-period="mois">
+                        <div class="check-icon">
+                            <i class="fas fa-check" style="display: none;"></i>
+                        </div>
+                        <div class="plan-duration">1 Mois</div>
+                        <div class="plan-price">
+                            <span class="currency">Dz</span>5000<span style="font-size: 1rem; color: #64748b;">/mois</span>
+                        </div>
+                    </div>
+
+                    <div class="plan-card" data-plan="quarterly" data-price="129" data-period="3 mois">
+                        <div class="check-icon">
+                            <i class="fas fa-check" style="display: none;"></i>
+                        </div>
+                        <div class="plan-duration">3 Mois</div>
+                        <div class="plan-price">
+                            <span class="currency">Dz</span>9000<span style="font-size: 1rem; color: #64748b;">/trimestre</span>
+                        </div>
+                        <div class="plan-savings">Économisez 40%</div>
+                        
+                    </div>
+
+                    <div class="plan-card" data-plan="biannual" data-price="239" data-period="6 mois">
+                        <div class="check-icon">
+                            <i class="fas fa-check" style="display: none;"></i>
+                        </div>
+                        <div class="plan-duration">6 Mois</div>
+                        <div class="plan-price">
+                            <span class="currency">Dz</span>13900<span style="font-size: 1rem; color: #64748b;">/semestre</span>
+                        </div>
+                        <div class="plan-savings">Économisez 54%</div>
+                        
+                    </div>
+
+                    <div class="plan-card" data-plan="annual" data-price="449" data-period="1 an">
+                        <div class="check-icon">
+                            <i class="fas fa-check" style="display: none;"></i>
+                        </div>
+                        <div class="plan-duration">1 Année</div>
+                        <div class="plan-price">
+                            <span class="currency">Dz</span>18000<span style="font-size: 1rem; color: #64748b;">/an</span>
+                        </div>
+                        <div class="plan-savings">Économisez 70%</div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section de paiement -->
+            <div class="payment-section">
+                <h2 class="section-title">
+                    <i class="fas fa-credit-card"></i>
+                    Informations de paiement
+                </h2>
+
+                <div class="error-message" id="error-message"></div>
+
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="email" placeholder="votre@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nom complet</label>
+                        <input type="text" class="form-input" id="name" placeholder=" Nom Prénom" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Numéro de carte</label>
+                        <input type="text" class="form-input" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    </div>
+
+                    <div class="card-row">
+                        <div class="form-group">
+                            <label class="form-label">Date d'expiration</label>
+                            <input type="text" class="form-input" id="expiry" placeholder="MM/AA" maxlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">CVC</label>
+                            <input type="text" class="form-input" id="cvc" placeholder="123" maxlength="4" required>
+                        </div>
+                    </div>
+
+                    <div class="security-info">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Vos informations sont sécurisées par chiffrement SSL 256-bit et ne sont jamais stockées sur nos serveurs.</p>
+                    </div>
+
+                    <div class="payment-summary">
+                        <div class="summary-row">
+                            <span>Plan sélectionné:</span>
+                            <span id="selected-plan">Sélectionnez un plan</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Montant:</span>
+                            <span id="selected-amount">$0</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total à payer:</span>
+                            <span id="total-amount">$0</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="pay-button" id="pay-button" disabled>
+                        <span id="button-text">Sélectionnez un plan</span>
+                        <div class="loading-spinner" id="loading-spinner"></div>
+                    </button>
+
+                    <div class="accepted-cards">
+                        <div class="card-icon">CCP</div>
+                        <div class="card-icon">VISA</div>
+                        <div class="card-icon">MC</div>
+                        <div class="card-icon">AMEX</div>
+                        <div class="card-icon">DISC</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+// Vérifier si l'utilisateur est connecté
+fetch('/check-auth')
+  .then(response => response.json())
+  .then(data => {
+    if (!data.authenticated) {
+      window.location.href = '/login';
+    }
+  });
+
+// Variables globales
+let selectedPlan = null;
+let selectedPrice = 0;
+let selectedPeriod = '';
+
+// Sélection des plans
+document.querySelectorAll('.plan-card').forEach(card => {
+    card.addEventListener('click', function() {
+        // Retirer la sélection des autres cartes
+        document.querySelectorAll('.plan-card').forEach(c => {
+            c.classList.remove('selected');
+            c.querySelector('.check-icon i').style.display = 'none';
+        });
+
+        // Sélectionner cette carte
+        this.classList.add('selected');
+        this.querySelector('.check-icon i').style.display = 'block';
+
+        // Mettre à jour les informations
+        selectedPlan = this.dataset.plan;
+        
+        // Extraire le prix du texte affiché (en DZD)
+        const priceText = this.querySelector('.plan-price').textContent;
+        selectedPrice = parseInt(priceText.match(/\d+/g).join(''));
+        
+        selectedPeriod = this.dataset.period;
+
+        // Mettre à jour l'affichage
+        document.getElementById('selected-plan').textContent = selectedPeriod;
+        document.getElementById('selected-amount').textContent = `Dz${selectedPrice}`;
+        document.getElementById('total-amount').textContent = `Dz${selectedPrice}`;
+
+        // Activer le bouton de paiement
+        const payButton = document.getElementById('pay-button');
+        payButton.disabled = false;
+        document.getElementById('button-text').textContent = `Payer Dz${selectedPrice}`;
+    });
+});
+
+// Formatage automatique des champs
+document.getElementById('card-number').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+    let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+    if (formattedValue !== e.target.value) {
+        e.target.value = formattedValue;
+    }
+});
+
+document.getElementById('expiry').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length >= 3) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+    }
+    e.target.value = value;
+});
+
+document.getElementById('cvc').addEventListener('input', function(e) {
+    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+});
+
+// Gestion du formulaire de paiement
+document.getElementById('payment-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    if (!selectedPlan) {
+        showError('Veuillez sélectionner un plan d\'abonnement.');
+        return;
+    }
+
+    // Validation des champs
+    const email = document.getElementById('email').value;
+    const name = document.getElementById('name').value;
+    const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+    const expiry = document.getElementById('expiry').value;
+    const cvc = document.getElementById('cvc').value;
+
+    if (!email || !name || !cardNumber || !expiry || !cvc) {
+        showError('Veuillez remplir tous les champs obligatoires.');
+        return;
+    }
+
+    if (cardNumber.length < 13 || cardNumber.length > 19) {
+        showError('Numéro de carte invalide.');
+        return;
+    }
+
+    if (expiry.length !== 5 || !expiry.includes('/')) {
+        showError('Date d\'expiration invalide (MM/AA).');
+        return;
+    }
+
+    if (cvc.length < 3 || cvc.length > 4) {
+        showError('Code CVC invalide.');
+        return;
+    }
+
+    // Processus de paiement
+    await processPayment();
+});
+
+async function processPayment() {
+    const payButton = document.getElementById('pay-button');
+    const buttonText = document.getElementById('button-text');
+    const loadingSpinner = document.getElementById('loading-spinner');
+
+    // Afficher le loading
+    payButton.disabled = true;
+    buttonText.style.display = 'none';
+    loadingSpinner.style.display = 'block';
+
+    // Récupérer les données du formulaire
+    const paymentData = {
+        plan_id: selectedPlan,
+        email: document.getElementById('email').value,
+        name: document.getElementById('name').value,
+        payment_method_id: "pm_test_" + Math.random().toString(36).substring(2), // Exemple d'ID Stripe factice
+        card_last4: document.getElementById('card-number').value.slice(-4)
+    };
+
+    try {
+        // Envoyer les données au serveur Flask
+        const response = await fetch('/process-payment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(paymentData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Paiement réussi - rediriger vers la page patient
+            window.location.href = '/patient';
+        } else {
+            showError(result.error || "Erreur lors du paiement");
+        }
+    } catch (error) {
+        showError("Erreur réseau : " + error.message);
+    } finally {
+        // Réinitialiser le bouton
+        payButton.disabled = false;
+        buttonText.style.display = 'block';
+        loadingSpinner.style.display = 'none';
+    }
+}
+
+function showError(message) {
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+    
+    setTimeout(() => {
+        errorDiv.style.display = 'none';
+    }, 5000);
+}
+
+// Masquer les erreurs quand l'utilisateur commence à taper
+document.querySelectorAll('.form-input').forEach(input => {
+    input.addEventListener('input', () => {
+        document.getElementById('error-message').style.display = 'none';
+    });
+});
+
+// Calcul des économies pour chaque plan
+document.querySelectorAll('.plan-card').forEach(card => {
+    const price = parseInt(card.dataset.price);
+    const period = parseInt(card.dataset.period.match(/\d+/)[0]); // Extrait "3" de "3 mois"
+    const monthlyPrice = price / period;
+    const savings = Math.round(((5000 - monthlyPrice) / 5000) * 100);
+
+    if (savings > 0) {
+        const savingsElement = card.querySelector('.plan-savings');
+        if (savingsElement) {
+            savingsElement.textContent = `Économisez ${savings}%`;
+        }
+    }
+});
+</script>
+</body>
+</html>
