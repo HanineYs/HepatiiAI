@@ -1,0 +1,518 @@
+/* Admin Interface Styling - Matching Patient Interface */
+
+/* Base Styles */
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background-color: #e4e2f5;
+  }
+  
+  /* Sidebar - Matching Patient Sidebar */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #3d5af1;
+    width: 16rem;
+    padding: 1.8rem 0.85rem;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.5s ease-in-out;
+  }
+  
+  .sidebar-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .sidebar-header .logo {
+    width: 2.1rem;
+    margin: 0 0.8rem;
+  }
+  
+  .sidebar-header h3 {
+    padding-left: 0.5rem;
+    font-weight: 600;
+    font-size: 1.15rem;
+    white-space: nowrap;
+  }
+  
+  .nav {
+    flex: 1;
+  }
+  
+  .nav-link {
+    color: #cfcde7;
+    font-weight: 400;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    height: 53px;
+    padding: 0 1rem;
+    border-radius: 10px;
+    transition: all 0.3s;
+  }
+  
+  .nav-link:hover, .nav-link.active {
+    color: #fff;
+    background-color: #3651d4;
+  }
+  
+  .nav-link i {
+    font-size: 1.3rem;
+    min-width: 2.5rem;
+  }
+  
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 1rem 0;
+  }
+  
+  /* Main Content Area */
+  .main-content {
+    flex: 1;
+    padding: 2rem;
+    color: #1f2027;
+  }
+  
+  .main-content h2 {
+    color: #3d5af1;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Cards */
+  .card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    border: none;
+  }
+  
+  .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #eee;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    color: #3d5af1;
+    border-radius: 10px 10px 0 0 !important;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  /* KPI Cards */
+  .kpi-card {
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  
+  .kpi-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .kpi-card .card-title {
+    font-size: 1rem;
+    color: #6c757d;
+  }
+  
+  .kpi-card h2 {
+    font-size: 2.5rem;
+    color: #3d5af1;
+    margin: 0.5rem 0 0;
+  }
+  
+  /* Tables */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th {
+    background-color: #f8f9fa;
+    color: #3d5af1;
+    font-weight: 600;
+    padding: 0.75rem;
+    text-align: left;
+  }
+  
+  .table td {
+    padding: 0.75rem;
+    border-top: 1px solid #eee;
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(61, 90, 241, 0.05);
+  }
+  
+  /* Buttons */
+  .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  
+  .btn-primary {
+    background-color: #3d5af1;
+    border-color: #3d5af1;
+  }
+  
+  .btn-primary:hover {
+    background-color: #3651d4;
+    border-color: #3651d4;
+  }
+  
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+  }
+  
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Charts */
+  .chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 992px) {
+    .admin-container {
+      flex-direction: column;
+    }
+    
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    
+    .main-content {
+      padding: 1.5rem;
+    }
+  }
+  
+  /* Shrink Mode - Similar to Patient Interface */
+  body.shrink .sidebar {
+    width: 5.4rem;
+  }
+  
+  body.shrink .sidebar-header h3,
+  body.shrink .nav-link span {
+    display: none;
+  }
+  
+  body.shrink .nav-link {
+    justify-content: center;
+  }
+  
+  body.shrink .sidebar-footer .btn {
+    width: 100%;
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* Hide sections by default */
+  .d-none {
+    display: none;
+  }
+  .kpi-card {
+    transition: all 0.3s;
+}
+.kpi-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+.bg-diabetic {
+    background-color: #ff6b6b;
+}
+.bg-healthy {
+    background-color: #51cf66;
+}
+
+/* Style pour les nouveaux graphiques */
+.card canvas {
+  max-height: 300px;
+  width: 100% !important;
+}
+
+/* Espacement entre les cartes */
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+/* Model Stats Section */
+.model-stats {
+  margin: 30px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.model-stats h3 {
+  color: #343a40;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.model-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.model-card {
+  flex: 1;
+  min-width: 250px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.model-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.model-card h4 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.model-card p {
+  margin: 8px 0;
+  color: #495057;
+  font-size: 0.95rem;
+}
+
+.model-card .progress {
+  height: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .model-cards {
+      flex-direction: column;
+  }
+  
+  .model-card {
+      min-width: 100%;
+  }
+}
+
+/* Ajoutez à votre fichier CSS */
+.toast-container {
+  z-index: 1100;
+}
+
+.toast {
+  margin-bottom: 0.5rem;
+  min-width: 250px;
+}
+
+#refresh-patients-btn, #refresh-predictions-btn {
+  transition: all 0.3s ease;
+}
+
+#refresh-patients-btn:hover, #refresh-predictions-btn:hover {
+  transform: rotate(30deg);
+}
+
+.bx-loader {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+/* Dans votre fichier style.css ou style2.css */
+.table-responsive {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+/* Styles de base pour PC (par défaut) */
+.sidebar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  background-color: #3d5af1;
+  width: 16rem;
+  padding: 1.8rem 0.85rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.5s ease-in-out;
+}
+
+.mobile-footer {
+  display: none; /* Caché par défaut */
+}
+
+/* Styles pour mobile */
+/* Styles pour mobile - Footer horizontal */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .mobile-footer {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #3d5af1;
+    padding: 10px 0;
+    z-index: 1000;
+    flex-direction: row; /* Changé de column à row */
+    justify-content: space-around; /* Répartit les éléments équitablement */
+    align-items: center;
+  }
+
+  .mobile-footer .nav {
+    width: 100%;
+    display: flex;
+    flex-direction: row; /* Changé de column à row */
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .mobile-footer .nav-item {
+    padding: 0; /* Supprimé le padding vertical */
+    border-bottom: none; /* Supprimé la bordure */
+  }
+
+  .mobile-footer .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #cfcde7;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  .mobile-footer .nav-link i {
+    font-size: 1.2rem; /* Légèrement réduit */
+    margin-bottom: 3px;
+  }
+
+  .mobile-footer .nav-link span {
+    display: block;
+  }
+
+  .mobile-footer .nav-link.active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+  }
+
+  /* Style pour le bouton de déconnexion */
+  .mobile-footer .logout-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #cfcde7;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    text-decoration: none;
+  }
+
+  .mobile-footer .logout-btn i {
+    font-size: 1.2rem;
+    margin-bottom: 3px;
+  }
+
+  .main-content {
+    padding-bottom: 70px !important; /* Réduit l'espace pour le footer plus compact */
+  }
+}
+
+/* Styles responsives pour les tables */
+@media (max-width: 768px) {
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 600px; /* Force un minimum pour garder la lisibilité */
+  }
+
+  .table th, .table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .table thead {
+    display: none; /* Cache les en-têtes sur mobile */
+  }
+
+  .table tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+  }
+
+  .table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .table tbody td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 1rem;
+    color: #3d5af1;
+  }
+
+  .btn-sm {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+  }
+}
